@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Jasmine ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        #no-button { transition: all 0.2s ease; position: fixed; z-index: 50; }
+        .heart-float {
+            position: absolute;
+            animation: float 3s ease-in infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-pink-100 h-screen flex flex-col items-center justify-center overflow-hidden font-sans">
+
+    <div id="main-card" class="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-md w-full mx-4 relative transition-all duration-500">
+
+        <div class="relative mb-6 inline-block">
+            <img id="display-media"
+                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueW9oZ3R6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6ZzR6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/qUIm5wu6LAAog/giphy.gif"
+                 class="mx-auto rounded-2xl w-72 h-72 object-cover border-4 border-pink-200 shadow-md transition-all duration-500">
+            <div id="heart-container" class="absolute inset-0 pointer-events-none"></div>
+        </div>
+
+        <h1 id="question" class="text-3xl font-bold text-pink-600 mb-2">Hey Jasmine...</h1>
+        <p id="sub-text" class="text-xl text-gray-600 mb-8">Will you be my Valentine?</p>
+
+        <div id="button-group" class="flex justify-center items-center gap-6 h-16">
+            <button id="yes-button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-10 rounded-full text-xl shadow-lg transition-transform active:scale-90">
+                Yes!
+            </button>
+            <button id="no-button" class="bg-red-500 text-white font-bold py-3 px-10 rounded-full text-xl shadow-lg">
+                No
+            </button>
+        </div>
+
+        <div id="final-msg" class="hidden mt-4 text-2xl font-bold text-red-500 animate-pulse">
+            Can't wait to see you! 😍❤️
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('no-button');
+        const yesBtn = document.getElementById('yes-button');
+        const media = document.getElementById('display-media');
+        const question = document.getElementById('question');
+        const subText = document.getElementById('sub-text');
+        const heartContainer = document.getElementById('heart-container');
+        const finalMsg = document.getElementById('final-msg');
+
+        // The "Run Away" Logic
+        const moveButton = () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+        };
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+
+        // Success Logic
+        yesBtn.addEventListener('click', () => {
+            // 1. Swap GIF for Jasmine's Photo
+            media.src = "jazz.jpg"; // Uses your uploaded file
+            media.classList.add('border-red-400', 'scale-110');
+
+            // 2. Update Text
+            question.innerText = "YAY! Happy Valentine's!";
+            subText.innerText = "Best decision ever, Jasmine!";
+            noBtn.style.display = 'none';
+            finalMsg.classList.remove('hidden');
+
+            // 3. Create Floating Hearts
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = ['❤️','💖','✨','🌹'][Math.floor(Math.random() * 4)];
+                heart.className = 'heart-float';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heartContainer.appendChild(heart);
+                setTimeout(() => heart.remove(), 3000);
+            }, 300);
+
+            // 4. Confetti Explosion
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff0000', '#ff69b4', '#ffffff']
+            });
+        });
+    </script>
+</body>
+</html>
